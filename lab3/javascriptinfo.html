@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<body>
+  <script>
+    alert( "I'm JavaScript!" );
+  </script>
+</body>
+</html>
+
+<script src="file.js"></script>
+<script>
+  alert(1);
+</script>
+
+<!DOCTYPE html>
+<html>
+
+<body>
+
+  <script src="alert.js"></script>
+
+</body>
+
+</html>
+
+let admin, name; 
+
+name = "John";
+
+admin = name;
+
+alert( admin ); 
+
+alert('Hello'); alert('World');
+
+/* let name = "Ilya";
+
+ alert( `hello ${1}` ); // hello 1
+
+ alert( `hello ${"name"}` ); // hello name
+
+ alert( `hello ${name}` ); // hello Ilya*/
+
+alert("I'm JavaScript!");
+
+alert(3 +
+    1
+    + 2);
+
+alert("Hello")[1, 2].forEach(alert);
+
+// This comment occupies a line of its own
+alert('Hello');
+
+alert('World'); // This comment follows the statement
+
+/* Commenting out the code
+alert('Hello');
+*/
+alert('World');
+
+'use strict'; <Shift+Enter for a newline>
+//  ...your code
+<Enter to run></Enter>
+
+(function() {
+    'use strict';
+  
+    // ...your code here...
+  })()
+
+let message;
+
+message = 'Hello'; // store the string 'Hello' in the variable named message
+
+let message;
+message = 'Hello!';
+
+alert(message); // shows the variable content
+
+let message = 'Hello!'; // define the variable and assign the value
+
+alert(message); // Hello!
+
+let user = 'John';
+let age = 25;
+let message = 'Hello';
+
+var message = 'Hello';
+
+let message;
+
+message = 'Hello!';
+
+message = 'World!'; // value changed
+
+alert(message);
+
+let hello = 'Hello world!';
+
+let message;
+
+// copy 'Hello world' from hello into message
+message = hello;
+
+// now two variables hold the same data
+alert(hello); // Hello world!
+alert(message); // Hello world!
+
+let $ = 1; // declared a variable with the name "$"
+let _ = 2; // and now a variable with the name "_"
+
+alert($ + _); // 3
+
+let userName;
+let test123;
+
+let let = 5; // can't name a variable "let", error!
+let return = 5; // also can't name it "return", error!
+
+// note: no "use strict" in this example
+
+num = 5; // the variable "num" is created if it didn't exist
+
+alert(num); // 5
+"use strict";
+
+num = 5; // error: num is not defined
+
+const myBirthday = '18.04.1982';
+
+myBirthday = '01.01.2001'; // error, can't reassign the constant!
+
+const COLOR_RED = "#F00";
+const COLOR_GREEN = "#0F0";
+const COLOR_BLUE = "#00F";
+const COLOR_ORANGE = "#FF7F00";
+
+// ...when we need to pick a color
+let color = COLOR_ORANGE;
+alert(color); // #FF7F00
+
+const birthday = '18.04.1982';
+
+const age = someCode(birthday);
+
+// no error
+let message = "hello";
+message = 123456;
+
+let n = 123;
+n = 12.345;
+
+alert( 1 / 0 ); // Infinity
+
+alert( Infinity ); // Infinity
+
+alert( "not a number" / 2 ); // NaN, such division is 
+
+alert( NaN + 1 ); // NaN
+alert( 3 * NaN ); // NaN
+alert( "not a number" / 2 - 1 ); // NaN
+
+console.log(9007199254740991 + 1); // 9007199254740992
+console.log(9007199254740991 + 2); // 9007199254740992
+
+// the "n" at the end means it's a BigInt
+const bigInt = 1234567890123456789012345678901234567890n;
+
+let str = "Hello";
+let str2 = 'Single quotes are ok too';
+let phrase = `can embed another ${str}`;
+
+let name = "John";
+
+// embed a variable
+alert( `Hello, ${name}!` ); // Hello, John!
+
+// embed an expression
+alert( `the result is ${1 + 2}` ); // the result is 3
+
+alert( "the result is ${1 + 2}" ); // the result is ${1 + 2} (double quotes do nothing)
+
+let nameFieldChecked = true; // yes, name field is checked
+let ageFieldChecked = false; // no, age field is not checked
+
+let isGreater = 4 > 1;
+
+alert( isGreater ); // true (the comparison result is "yes")
+
+let age = null;
+
+let age;
+
+alert(age); // shows "undefined"
+
+let age = 100;
+
+// change the value to undefined
+age = undefined;
+
+alert(age); // "undefined"
+
+typeof undefined // "undefined"
+
+typeof 0 // "number"
+
+typeof 10n // "bigint"
+
+typeof true // "boolean"
+
+typeof "foo" // "string"
+
+typeof Symbol("id") // "symbol"
+
+typeof Math // "object"  (1)
+
+typeof null // "object"  (2)
+
+typeof alert // "function"  (3)
