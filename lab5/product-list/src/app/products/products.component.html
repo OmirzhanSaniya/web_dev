@@ -1,0 +1,58 @@
+<header class="Product-list">
+  <div class="container">
+    <a href="#" class="brand">
+      <span class="brand-text">Product-list</span>
+    </a>
+  </div>
+</header>
+
+<!-- Кнопки для переключения -->
+<div class="toggle-buttons">
+  <button (click)="showFavorites = false" [class.active]="!showFavorites">All products</button>
+  <button (click)="showFavorites = true" [class.active]="showFavorites">Liked</button>
+</div>
+
+<!-- Сетка товаров -->
+<div class="products-grid">
+  <div class="product-card" *ngFor="let product of (showFavorites ? favorites : products)">
+      <div class="image-gallery">
+        <div class="image-container" *ngFor="let img of product.images">
+          <img [src]="img" alt="Product image" class="gallery-image" />
+        </div>
+      </div>
+    
+      <h3 class="product-name">{{ product.name }}</h3>
+      <p class="product-description">{{ product.description || 'No description' }}</p>
+    
+      <div class="rating">
+        <span *ngFor="let star of getStars(product.rating)" class="star">
+          <i class="fas" [ngClass]="star ? 'fa-star' : 'fa-star-o'"></i>
+        </span>
+        <span class="rating-value">Rating: {{ product.rating }}/5</span>
+      
+        <!-- Кнопка лайка с изображением -->
+        <button class="like-button" (click)="toggleFavorite(product)">
+          <img 
+            [src]="product.isFavorite ? 'assets/icons/heart-filled.png' : 'assets/icons/heart-outline.png'" 
+            alt="Like"
+            class="like-icon"
+            width="13" height="13"
+          />
+        </button>
+        
+      </div>                
+    
+      <div class="price-buy-container">
+        <span class="product-price">{{ product.price }} ₸</span>
+        <button class="kaspi-buy small" (click)="openKaspiLink(product.kaspiLink)">
+          Buy on Kaspi.kz
+        </button>
+      </div>
+    
+      <div class="share-links">
+        <a (click)="shareViaWhatsApp(product.kaspiLink)">Share on WhatsApp</a> |
+        <a (click)="shareViaTelegram(product.kaspiLink)">Share on Telegram</a>
+      </div>
+    </div>
+     
+</div>
