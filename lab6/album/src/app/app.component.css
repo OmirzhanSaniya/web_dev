@@ -1,0 +1,22 @@
+
+
+ul{
+  list-style: none;
+  background: #8CD0E3;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-left: 15px;
+  margin-top: 0px;
+}
+li{
+  display: inline-block;
+  margin-right: 20px;
+  font-size: 20px;
+}
+a{
+  color:white;
+  font-weight: bold;
+}
+a:active{
+  color:#F5EA77;
+}
