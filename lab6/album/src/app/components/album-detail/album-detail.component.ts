@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-album-detail',
-  imports: [],
+  // imports: [],
   templateUrl: './album-detail.component.html',
-  styleUrl: './album-detail.component.css'
+  styleUrls: ['./album-detail.component.css']
 })
 export class AlbumDetailComponent {
 

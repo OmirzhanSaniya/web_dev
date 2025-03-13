@@ -1,5 +1,3 @@
-
-
 ul{
   list-style: none;
   background: #8CD0E3;
@@ -7,6 +5,7 @@ ul{
   padding-bottom: 20px;
   padding-left: 15px;
   margin-top: 0px;
+  border-radius: 5px;
 }
 li{
   display: inline-block;
@@ -18,5 +17,8 @@ a{
   font-weight: bold;
 }
 a:active{
-  color:#F5EA77;
+  color:cornflowerblue;
+}
+a:hover{
+  color:cornflowerblue;
 }

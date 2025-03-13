@@ -1,9 +1,10 @@
 li{
-  /*margin-top:30px;*/
-  border-color:yellow;
-  border-radius: 2px;
+  /* margin-top:30px; */
+  border-color:#8CD0E3;
+  border-radius: 5px;
   border-style: solid;
   padding:15px;
+  margin: 15px;
 
 }
 ul{
@@ -15,23 +16,29 @@ a{
   color:#8CD0E3;
 }
 a:visited {
-  /*color:navy;*/
+  /* color:navy; */
   color:#000080;
 }
 li:hover{
-  border-color:cornflowerblue ;
+  border-color:cornflowerblue;
 }
 
 button{
+  border: none;
+  cursor: pointer;
   margin-left: 20px;
-  background-color:#8CD0E3;
-  border-radius: 1px;
+  background-color:#ffffff;
+  border-radius: 5px;
   border-color: #8CD0E3;
-  color:white;
+  color:rgb(255, 0, 0);
   font-weight: bold;
+  text-decoration:underline;
+}
+button:hover{
+  border-color:cornflowerblue;
 }
 
 input{
-  border-radius: 2px;
-  border-color: #8CD0E3;
+  margin-left: 20px;
+  border-radius: 5px;
 }

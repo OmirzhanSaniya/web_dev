@@ -3,7 +3,6 @@
   <input type="text" placeholder="Title"  [(ngModel)]="newAlbum.title">
   <button (click)="addAlbum()">Add album</button>
 
-
   <ul *ngFor="let album of albums">
     <li>
       <a routerLink="/albums/{{album.id}}">
