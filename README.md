@@ -1,4 +1,3 @@
-Проект: Каталог фильмов
 # 🎞️ Проект: Каталог фильмов
 
 ## 📌 Описание проекта  
@@ -18,7 +17,7 @@
     <img src="https://img.shields.io/badge/Django-092E20?logo=django&logoColor=white" style="margin-left: 8px;">
   </div>
   <div style="background: #f5f5f5; padding: 8px 12px; border-radius: 20px;">
-    <strong>Языки:</strong> TypeScript, HTML, CSS
+    <strong>Языки:</strong> TypeScript, HTML, CSS, Python
   </div>
   <div style="background: #f5f5f5; padding: 8px 12px; border-radius: 20px;">
     <strong>Система контроля версий:</strong> Git
@@ -32,6 +31,21 @@
   ✅ <strong>Фильтрация фильмов.</strong>  
   ✅ <strong>Отображение детальной информации о фильме.</strong>  
 </div>
+
+## 🚀 Установка и запуск
+<div style="background: #f0f4ff; padding: 15px; border-radius: 8px; border-left: 4px solid #3367d6;">
+```bash
+# Клонировать репозиторий
+git clone https://github.com/your-repo/movie-catalog.git
+
+# Запуск frontend
+cd movie-catalog/frontend
+npm install
+ng serve
+
+# Запуск backend
+cd ../backend
+python manage.py runserver </div>
 
 ## 📌 Разделение на роли и задачи
 
