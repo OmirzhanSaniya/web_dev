@@ -34,9 +34,9 @@
 
 ## 🚀 Установка и запуск
 <div style="background: #f0f4ff; padding: 15px; border-radius: 8px; border-left: 4px solid #3367d6;">
-```bash
+
 # Клонировать репозиторий
-git clone https://github.com/your-repo/movie-catalog.git
+git clone https://github.com/OmirzhanSaniya/web_dev_project.git
 
 # Запуск frontend
 cd movie-catalog/frontend
@@ -85,5 +85,5 @@ python manage.py runserver </div>
 <hr style="border: 0; height: 1px; background: #e1e4e8; margin: 20px 0;">
 
 <div style="text-align: center; color: #586069; font-size: 14px;">
-  Проект разработан с использованием современных веб-технологий
+  Проект с использованием современных веб-технологий
 </div>
