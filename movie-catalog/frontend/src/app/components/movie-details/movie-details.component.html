@@ -1,0 +1,78 @@
+<div *ngIf="loading" class="loading-spinner">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<div *ngIf="error" class="alert alert-danger text-center">
+  {{ error }}
+</div>
+
+<ng-container *ngIf="movie && !loading">
+  <div class="movie-detail-container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="movie-poster-container">
+          <img [src]="movie.poster_url || 'assets/default-movie.jpg'" 
+               class="movie-poster img-fluid rounded shadow" 
+               [alt]="movie.title + ' poster'">
+          <div class="movie-rating-badge">
+            <span class="rating-star">★</span>
+            <span class="rating-value">{{ movie.rating.toFixed(1) }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-8">
+        <div class="movie-info">
+          <h1 class="movie-title">{{ movie.title }} <span class="movie-year">({{ movie.release_year }})</span></h1>
+          
+          <div class="movie-meta">
+            <span class="movie-duration">{{ movie.duration_minutes }} min</span>
+            <span class="meta-separator">|</span>
+            <span class="movie-director">{{ movie.director.name }}</span>
+          </div>
+          
+          <div class="movie-genres mb-3">
+            <span class="genre-badge" *ngFor="let genre of movie.genres">
+              {{ genre.name }}
+            </span>
+            <span *ngIf="!movie.genres.length" class="text-muted">No genres specified</span>
+          </div>
+          
+          <div class="movie-description">
+            <h3>Overview</h3>
+            <p>{{ movie.description || 'No description available' }}</p>
+          </div>
+          
+          <a routerLink="/" class="btn btn-primary back-button">
+            <i class="bi bi-arrow-left"></i> Back to List
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Блок похожих фильмов -->
+    <div class="similar-movies mt-5" *ngIf="similarMovies.length">
+      <h3 class="section-title">You may also like</h3>
+      <div class="row">
+        <div class="col-md-3 col-sm-6" *ngFor="let similar of similarMovies">
+          <div class="similar-movie-card">
+            <img [src]="similar.poster_url || 'assets/default-movie.jpg'" 
+                 class="img-fluid rounded" 
+                 [alt]="similar.title">
+            <h5 class="similar-movie-title">{{ similar.title }}</h5>
+            <div class="similar-movie-rating">
+              <span class="rating-star">★</span>
+              <span>{{ similar.rating.toFixed(1) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<div *ngIf="!movie && !loading && !error" class="alert alert-warning text-center">
+  Movie not found.
+</div>

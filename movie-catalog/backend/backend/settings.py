@@ -20,7 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+<<<<<<< HEAD
 SECRET_KEY = 'django-insecure-l!l!7302whvk%e3op+kw#&kfx(ljvj5!7=teg^sv)8-zn9skv+'
+=======
+SECRET_KEY = 'django-insecure--xy#)vxhy&&w3id^1$_j^jh1wad6x3ee1d+wr4tg9d!lrxk$r0'
+>>>>>>> bd5ca86cfa364ffaeafd16c9dfbb979a913c19f6
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,9 +41,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
 ]
 
 MIDDLEWARE = [
+=======
+    'corsheaders',
+    'rest_framework',
+    'django_filters',
+    'movies',
+]
+
+MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+>>>>>>> bd5ca86cfa364ffaeafd16c9dfbb979a913c19f6
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,6 +64,49 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+<<<<<<< HEAD
+=======
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+# Или более безопасный вариант (разрешаем только нужные домены):
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",
+    "http://127.0.0.1:4200",
+]
+
+# Разрешаем все методы и заголовки
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+>>>>>>> bd5ca86cfa364ffaeafd16c9dfbb979a913c19f6
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
