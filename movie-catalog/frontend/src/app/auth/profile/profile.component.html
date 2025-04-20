@@ -1,0 +1,29 @@
+<div class="profile-container">
+    <h2>Мой профиль</h2>
+  
+    <mat-spinner *ngIf="isLoading" diameter="40"></mat-spinner>
+  
+    <div *ngIf="!isLoading">
+      <section class="section">
+        <h3>Просмотренные фильмы</h3>
+        <app-movie-list 
+          [movies]="watchedMovies"
+          [showActions]="false">
+        </app-movie-list>
+        <p *ngIf="watchedMovies.length === 0" class="empty-message">
+          Вы еще не отметили ни одного фильма как просмотренный
+        </p>
+      </section>
+  
+      <section class="section">
+        <h3>Избранные фильмы</h3>
+        <app-movie-list 
+          [movies]="favoriteMovies"
+          [showActions]="false">
+        </app-movie-list>
+        <p *ngIf="favoriteMovies.length === 0" class="empty-message">
+          У вас пока нет избранных фильмов
+        </p>
+      </section>
+    </div>
+  </div>

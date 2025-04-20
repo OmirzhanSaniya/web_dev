@@ -20,11 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-<<<<<<< HEAD
 SECRET_KEY = 'django-insecure-l!l!7302whvk%e3op+kw#&kfx(ljvj5!7=teg^sv)8-zn9skv+'
-=======
-SECRET_KEY = 'django-insecure--xy#)vxhy&&w3id^1$_j^jh1wad6x3ee1d+wr4tg9d!lrxk$r0'
->>>>>>> bd5ca86cfa364ffaeafd16c9dfbb979a913c19f6
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -35,26 +31,24 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-<<<<<<< HEAD
+    'rest_framework',
+    'rest_framework.authtoken',
+    # 'movies',
+    'django_filters',
+    'movies.apps.MoviesConfig',
 ]
 
-MIDDLEWARE = [
-=======
-    'corsheaders',
-    'rest_framework',
-    'django_filters',
-    'movies',
-]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
->>>>>>> bd5ca86cfa364ffaeafd16c9dfbb979a913c19f6
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -64,9 +58,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-<<<<<<< HEAD
-=======
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
@@ -75,6 +74,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -106,7 +106,6 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
->>>>>>> bd5ca86cfa364ffaeafd16c9dfbb979a913c19f6
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [

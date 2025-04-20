@@ -1,22 +1,46 @@
 from rest_framework import serializers
-from .models import Movie, Genre, Director
+from .models import Movie, UserProfile
+from django.contrib.auth.models import User
+from rest_framework import serializers
+from .models import Movie
 
-class GenreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Genre
-        fields = ['id', 'name']
-
-class DirectorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Director
-        fields = ['id', 'name', 'bio']
+from rest_framework import serializers
+from .models import Movie
 
 class MovieSerializer(serializers.ModelSerializer):
-    genres = GenreSerializer(many=True, read_only=True)
-    director = DirectorSerializer(read_only=True)
-    
     class Meta:
         model = Movie
-        fields = ['id', 'title', 'description', 'release_year', 
-                 'duration_minutes', 'rating', 'genres', 
-                 'director', 'poster_url']
+        fields = [
+            'id',
+            'title',
+            'year',
+            'duration',
+            'genre',
+            'description',
+            'director',
+            'cast',
+            'imdb_rating',
+            'poster_url',
+            'created_at',
+            'updated_at'
+        ]
+        read_only_fields = ['created_at', 'updated_at']
+    
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['is_watched'] = False  # Можно добавить флаги для авторизованных пользователей
+        return response
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    watched_movies = MovieSerializer(many=True)
+    favorite_movies = MovieSerializer(many=True)
+    
+    class Meta:
+        model = UserProfile
+        fields = ['user', 'watched_movies', 'favorite_movies']

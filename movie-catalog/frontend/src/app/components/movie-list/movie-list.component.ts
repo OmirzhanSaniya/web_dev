@@ -1,105 +1,109 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Input } from '@angular/core';
 import { MovieService } from '../../services/movie.service';
-import { GenreService } from '../../services/genre.service';
-import { DirectorService } from '../../services/director.service';
-import { Movie, MovieParams } from '../../models/movie.model';
-import { Genre } from '../../models/genre.model';
-import { Director } from '../../models/director.model';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { TruncatePipe } from "../../truncate.pipe";
+import { AuthService } from '../../services/auth.service';
+import { Movie } from '../../models/movie.model';
+import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, TruncatePipe],
+  imports: [
+    CommonModule, 
+    MatCardModule, 
+    MatButtonModule, 
+    MatIconModule,
+    RouterLink
+  ],
   templateUrl: './movie-list.component.html',
-  styleUrls: ['./movie-list.component.css']
+  styleUrls: ['./movie-list.component.scss']
 })
 export class MovieListComponent implements OnInit {
-  movies: Movie[] = [];
-  genres: Genre[] = [];
-  directors: Director[] = [];
-  params: MovieParams = {};
-  totalItems = 0;
-  currentPage = 1;
-  itemsPerPage = 10;
-  loading = false;
-  error: string | null = null;
+  @Input() movies: Movie[] = [];
+  @Input() showActions = true;
+  showDefaultPoster = true; 
+  
+  watchedMovies: number[] = [];
+  favoriteMovies: number[] = [];
+  isLoading = true;
 
   constructor(
     private movieService: MovieService,
-    private genreService: GenreService,
-    private directorService: DirectorService
-  ) { }
+    private auth: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.loadGenres();
-    this.loadDirectors();
-    this.loadMovies();
+    if (this.movies.length === 0) {
+      this.loadMovies();
+    } else {
+      this.isLoading = false;
+    }
+    
+    if (this.isAuthenticated()) {
+      this.loadUserData();
+    }
+  }
+
+  isAuthenticated(): boolean {
+    return this.auth.isAuthenticated();
   }
 
   loadMovies(): void {
-    this.loading = true;
-    this.error = null;
-    this.params.page = this.currentPage;
-    
-    this.movieService.getMovies(this.params).subscribe({
-      next: (response) => {
-        this.movies = response.results;
-        this.totalItems = response.count;
-        this.loading = false;
+    this.isLoading = true;
+    this.movieService.getMovies().subscribe({
+      next: (response: any) => {
+        this.movies = response.results ? response.results : response;
+        this.isLoading = false;
       },
-      error: (error) => {
-        this.error = 'Failed to load movies';
-        this.loading = false;
-        console.error('Error loading movies:', error);
+      error: (err) => {
+        console.error('Error loading movies', err);
+        this.isLoading = false;
       }
     });
   }
 
-  loadGenres(): void {
-    this.genreService.getGenres().subscribe({
-      next: (genres) => {
-        this.genres = genres;
+  loadUserData(): void {
+    this.auth.getProfile().subscribe({
+      next: (profile) => {
+        this.watchedMovies = profile.watched_movies?.map((m: any) => m.id) || [];
+        this.favoriteMovies = profile.favorite_movies?.map((m: any) => m.id) || [];
       },
-      error: (error) => {
-        console.error('Error loading genres:', error);
-      }
+      error: (err) => console.error('Error loading user data', err)
     });
   }
 
-  loadDirectors(): void {
-    this.directorService.getDirectors().subscribe({
-      next: (directors) => {
-        this.directors = directors;
-      },
-      error: (error) => {
-        console.error('Error loading directors:', error);
-      }
+  isWatched(movieId: number | undefined): boolean {
+    return movieId ? this.watchedMovies.includes(movieId) : false;
+  }
+
+  isFavorite(movieId: number | undefined): boolean {
+    return movieId ? this.favoriteMovies.includes(movieId) : false;
+  }
+
+  toggleWatched(movieId: number | undefined): void {
+    if (!movieId) return;
+    this.movieService.toggleWatched(movieId).subscribe({
+      next: () => this.loadUserData(),
+      error: (err) => console.error('Error toggling watched status', err)
     });
   }
 
-  onSearch(params: MovieParams): void {
-    this.params = { ...this.params, ...params };
-    this.currentPage = 1;
-    this.loadMovies();
+  toggleFavorite(movieId: number | undefined): void {
+    if (!movieId) return;
+    this.movieService.toggleFavorite(movieId).subscribe({
+      next: () => this.loadUserData(),
+      error: (err) => console.error('Error toggling favorite status', err)
+    });
   }
 
-  resetFilters(): void {
-    this.params = {};
-    this.currentPage = 1;
-    this.loadMovies(); // Прямой вызов вместо onSearch()
-  }
-  
-  onPageChange(page: number): void {
-    this.currentPage = page;
-    this.loadMovies();
-  }
-
-  getPaginationArray(): number[] {
-    const totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  deleteMovie(id: number | undefined): void {
+    if (!id || !confirm('Удалить фильм?')) return;
+    this.movieService.deleteMovie(id).subscribe({
+      next: () => this.movies = this.movies.filter(m => m.id !== id),
+      error: (err) => console.error('Error deleting movie', err)
+    });
   }
 }
