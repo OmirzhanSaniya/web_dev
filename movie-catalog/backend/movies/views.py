@@ -1,24 +1,26 @@
-from rest_framework import generics, permissions, status
+from django.shortcuts import get_object_or_404
+from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
-from .models import Movie, UserProfile
-from .serializers import MovieSerializer, UserProfileSerializer
+from .models import Movie, UserProfile, Rating, Review, Genre, Director
+from .serializers import (
+    MovieSerializer, UserProfileSerializer, ReviewSerializer,
+    RatingSerializer, GenreSerializer, DirectorSerializer, UserRegisterSerializer
+)
+from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.pagination import PageNumberPagination
-from rest_framework import viewsets
-from .models import Movie
-from .serializers import MovieSerializer
-from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['year', 'genre', 'director']
-    search_fields = ['title', 'director', 'cast']
+    filterset_fields = ['year', 'genres', 'director']
+    search_fields = ['title', 'director__name', 'cast']
     ordering_fields = ['year', 'title', 'imdb_rating']
     ordering = ['-year']
 
@@ -33,12 +35,7 @@ class MovieList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     pagination_class = StandardResultsSetPagination
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['year', 'rating', 'director']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        # Дополнительные фильтры можно добавить здесь
-        return queryset
+    filterset_fields = ['year', 'genres', 'director']
 
 class MovieDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Movie.objects.all()
@@ -46,7 +43,7 @@ class MovieDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class UserProfileView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     def get(self, request):
         profile = UserProfile.objects.get(user=request.user)
@@ -66,49 +63,89 @@ class UserProfileView(APIView):
             return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
         
         if action == 'watch':
-            return self._toggle_movie_status(profile.watched_movies, movie)
+            profile.watched_movies.add(movie)
+            return Response({'status': 'added to watched'})
         elif action == 'favorite':
-            return self._toggle_movie_status(profile.favorite_movies, movie)
+            profile.favorite_movies.add(movie)
+            return Response({'status': 'added to favorites'})
         
         return Response({'error': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    def _toggle_movie_status(self, manager, movie):
-        if movie in manager.all():
-            manager.remove(movie)
-            return Response({'status': 'removed'})
-        else:
-            manager.add(movie)
-            return Response({'status': 'added'})
 
 @api_view(['POST'])
 def register(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    email = request.data.get('email', '')
-    
-    if not username or not password:
-        return Response(
-            {'error': 'Both username and password are required'}, 
-            status=status.HTTP_400_BAD_REQUEST
-        )
-    
-    if User.objects.filter(username=username).exists():
-        return Response(
-            {'error': 'Username already exists'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-    
-    try:
-        user = User.objects.create_user(username=username, password=password, email=email)
+    serializer = UserRegisterSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
         token = Token.objects.create(user=user)
         UserProfile.objects.create(user=user)
         return Response({
-            'token': token.key, 
+            'token': token.key,
             'user_id': user.id,
             'username': user.username
         }, status=status.HTTP_201_CREATED)
-    except Exception as e:
-        return Response(
-            {'error': str(e)},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ReviewList(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ReviewDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        review = get_object_or_404(Review, pk=pk)
+        serializer = ReviewSerializer(review)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        review = get_object_or_404(Review, pk=pk, user=request.user)
+        serializer = ReviewSerializer(review, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        review = get_object_or_404(Review, pk=pk, user=request.user)
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class AddStarRatingView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = RatingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class RatingDetail(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, pk):
+        rating = get_object_or_404(Rating, pk=pk, user=request.user)
+        serializer = RatingSerializer(rating, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        rating = get_object_or_404(Rating, pk=pk, user=request.user)
+        rating.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class GenreViewSet(viewsets.ModelViewSet):
+    queryset = Genre.objects.all()
+    serializer_class = GenreSerializer
+
+class DirectorViewSet(viewsets.ModelViewSet):
+    queryset = Director.objects.all()
+    serializer_class = DirectorSerializer

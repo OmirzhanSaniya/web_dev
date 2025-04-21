@@ -16,31 +16,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework import routers
-from movies import views
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
 
-router = routers.DefaultRouter()
-router.register(r'movies', views.MovieViewSet, basename='movie')
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Movie Catalog API",
+      default_version='v1',
+      description="API for movie catalog application",
+   ),
+   public=True,
+   permission_classes=[permissions.AllowAny],
+)
 
 urlpatterns = [
-    # Admin panel
     path('admin/', admin.site.urls),
-    
-    # API endpoints
-    path('api/', include([
-        # ViewSet endpoints (auto-generated CRUD)
-        path('', include(router.urls)),
-        
-        # Custom endpoints
-        path('movies/list/', views.MovieList.as_view(), name='movie-list'),
-        path('movies/<int:pk>/detail/', views.MovieDetail.as_view(), name='movie-detail'),
-        
-        # User management
-        path('profile/', views.UserProfileView.as_view(), name='user-profile'),
-        path('profile/<str:action>/', views.UserProfileView.as_view(), name='user-profile-action'),
-        path('register/', views.register, name='register'),
-        
-        # Authentication
-        path('auth/', include('rest_framework.urls', namespace='rest_framework')),
-    ])),
+    path('api/', include('movies.urls')),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
