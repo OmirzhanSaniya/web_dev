@@ -1,0 +1,10 @@
+<div *ngIf="movie; else noMovie">
+  <button (click)="router.navigate(['/movies'])">Back</button>
+  <h2>{{ movie.title }} ({{ movie.year }})</h2>
+  <img [src]="movie.posterUrl" alt="{{ movie.title }}" width="200" />
+  <p><strong>Genre:</strong> {{ movie.genre }}</p>
+  <p>{{ movie.description }}</p>
+</div>
+<ng-template #noMovie>
+  <p>Movie not found.</p>
+</ng-template>

@@ -1,0 +1,16 @@
+<div>
+  <input type="text" placeholder="Search movies..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilters()" />
+  <select [(ngModel)]="genreFilter" (ngModelChange)="applyFilters()">
+    <option value="">All genres</option>
+    <option *ngFor="let g of genres" [value]="g">{{ g }}</option>
+  </select>
+</div>
+
+<ul>
+  <li *ngFor="let movie of filtered">
+    <a [routerLink]="['/movies', movie.id]">
+      <img [src]="movie.posterUrl" alt="{{ movie.title }}" width="50"/>
+      {{ movie.title }} ({{ movie.year }})
+    </a>
+  </li>
+</ul>
