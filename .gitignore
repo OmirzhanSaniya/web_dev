@@ -1,0 +1,27 @@
+# Python (myenv)
+myenv/
+
+# Django (Backend)
+*.pyc
+*.pyo
+__pycache__/
+db.sqlite3
+
+# Angular (Frontend)
+node_modules/
+dist/
+tmp/
+*.log
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Environment files (Django and Angular)
+src/environments/*.ts   # Angular environment files (если они не должны быть в репозитории)
+
+# Django migrations
+*/migrations/
+
+# .env files for secrets
+*.env

@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'movies.apps.MoviesConfig',
 ]
 
-
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'corsheaders.middleware.CorsMiddleware',

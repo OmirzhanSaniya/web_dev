@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
@@ -50,7 +52,7 @@ class UserProfileView(APIView):
         serializer = UserProfileSerializer(profile)
         return Response(serializer.data)
     
-    def post(self, request, action):
+    def post(self, request):
         profile = UserProfile.objects.get(user=request.user)
         movie_id = request.data.get('movie_id')
         
@@ -61,17 +63,9 @@ class UserProfileView(APIView):
             movie = Movie.objects.get(pk=movie_id)
         except Movie.DoesNotExist:
             return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
-        
-        if action == 'watch':
-            profile.watched_movies.add(movie)
-            return Response({'status': 'added to watched'})
-        elif action == 'favorite':
-            profile.favorite_movies.add(movie)
-            return Response({'status': 'added to favorites'})
-        
-        return Response({'error': 'Invalid action'}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def register(request):
     serializer = UserRegisterSerializer(data=request.data)
     if serializer.is_valid():
@@ -84,6 +78,36 @@ def register(request):
             'username': user.username
         }, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def toggle_favorite(request):
+    movie_id = request.data.get('movie_id')
+    try:
+        movie = Movie.objects.get(id=movie_id)
+        profile = request.user.profile
+        if movie in profile.favorite_movies.all():
+            profile.favorite_movies.remove(movie)
+        else:
+            profile.favorite_movies.add(movie)
+        return Response({'message': 'Favorite updated'})
+    except Movie.DoesNotExist:
+        return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def toggle_watched(request):
+    movie_id = request.data.get('movie_id')
+    try:
+        movie = Movie.objects.get(id=movie_id)
+        profile = request.user.profile
+        if movie in profile.watched_movies.all():
+            profile.watched_movies.remove(movie)
+        else:
+            profile.watched_movies.add(movie)
+        return Response({'message': 'Watched updated'})
+    except Movie.DoesNotExist:
+        return Response({'error': 'Movie not found'}, status=status.HTTP_404_NOT_FOUND)
 
 class ReviewList(APIView):
     permission_classes = [IsAuthenticated]

@@ -8,14 +8,8 @@ import { Router } from "@angular/router";
 @Component({
   standalone: true,
   imports: [FormsModule, MatButtonModule, MatInputModule],
-  template: `
-    <form (ngSubmit)="onSubmit()">
-      <input [(ngModel)]="credentials.username" name="username" placeholder="Логин">
-      <input [(ngModel)]="credentials.password" name="password" type="password" placeholder="Пароль">
-      <button type="submit">Войти</button>
-      <p>Нет аккаунта? <a routerLink="/register">Зарегистрируйтесь</a></p>
-    </form>
-  `
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   credentials = { username: '', password: '' };
@@ -25,7 +19,7 @@ export class LoginComponent {
   onSubmit() {
     this.auth.login(this.credentials).subscribe({
       next: () => this.router.navigate(['/']),
-      error: (err) => alert('Ошибка входа')
+      error: (err) => alert('Error logging in')
     });
   }
 }

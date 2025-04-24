@@ -6,16 +6,24 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatCardModule, 
-    MatButtonModule, 
+    CommonModule,
+    FormsModule,
+    MatCardModule,
+    MatButtonModule,
     MatIconModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
     RouterLink
   ],
   templateUrl: './movie-list.component.html',
@@ -23,7 +31,11 @@ import { RouterLink } from '@angular/router';
 })
 export class MovieListComponent implements OnInit {
   @Input() movies: Movie[] = [];
-  @Input() showActions = true;
+  @Input() showActions: boolean = true;
+  filteredMovies: Movie[] = [];
+  genres: string[] = [];
+  selectedGenre: string = '';
+  sortOption: string = '';
   showDefaultPoster = true; 
   
   watchedMovies: number[] = [];
@@ -39,6 +51,8 @@ export class MovieListComponent implements OnInit {
     if (this.movies.length === 0) {
       this.loadMovies();
     } else {
+      this.filteredMovies = [...this.movies];
+      this.extractGenres();
       this.isLoading = false;
     }
     
@@ -56,6 +70,8 @@ export class MovieListComponent implements OnInit {
     this.movieService.getMovies().subscribe({
       next: (response: any) => {
         this.movies = response.results ? response.results : response;
+        this.filteredMovies = [...this.movies];
+        this.extractGenres();
         this.isLoading = false;
       },
       error: (err) => {
@@ -63,6 +79,40 @@ export class MovieListComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+
+  extractGenres(): void {
+    const genreSet = new Set<string>();
+    this.movies.forEach(movie => {
+      movie.genres?.forEach(genre => genreSet.add(genre.name));
+    });
+    this.genres = Array.from(genreSet);
+  }
+
+  filterMovies(): void {
+    this.filteredMovies = this.movies.filter(movie => {
+      const matchesGenre = this.selectedGenre ? movie.genres?.some(g => g.name === this.selectedGenre) : true;
+      return matchesGenre;
+    });
+    this.sortMovies();
+  }
+
+  sortMovies(): void {
+    if (this.sortOption === 'rating') {
+      this.filteredMovies.sort((a, b) => (b.imdb_rating || 0) - (a.imdb_rating || 0));
+    } else if (this.sortOption === 'year') {
+      this.filteredMovies.sort((a, b) => (b.year || 0) - (a.year || 0));
+    }
+  }
+
+  onGenreChange(genre: string): void {
+    this.selectedGenre = genre;
+    this.filterMovies();
+  }
+
+  onSortChange(option: string): void {
+    this.sortOption = option;
+    this.sortMovies();
   }
 
   loadUserData(): void {
@@ -94,16 +144,14 @@ export class MovieListComponent implements OnInit {
   toggleFavorite(movieId: number | undefined): void {
     if (!movieId) return;
     this.movieService.toggleFavorite(movieId).subscribe({
-      next: () => this.loadUserData(),
+      next: () => {
+        this.loadUserData();
+      },
       error: (err) => console.error('Error toggling favorite status', err)
     });
-  }
+  }  
 
-  deleteMovie(id: number | undefined): void {
-    if (!id || !confirm('Удалить фильм?')) return;
-    this.movieService.deleteMovie(id).subscribe({
-      next: () => this.movies = this.movies.filter(m => m.id !== id),
-      error: (err) => console.error('Error deleting movie', err)
-    });
+  getGenreNames(movie: Movie): string {
+    return movie.genres?.map(g => g.name).join(', ') || '';
   }
-}
+} 

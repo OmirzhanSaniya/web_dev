@@ -8,7 +8,7 @@ import { Movie } from '../models/movie.model';
   providedIn: 'root'
 })
 export class MovieService {
-  private apiUrl = 'http://localhost:8000/api/movies';
+  private apiUrl = 'http://127.0.0.1:8000/movies';
 
   constructor(private http: HttpClient) { }
 
@@ -37,18 +37,18 @@ export class MovieService {
 
   // Методы для работы с избранным и просмотренными
   toggleWatched(movieId: number): Observable<any> {
-    return this.http.post(`/api/profile/watch/`, { movie_id: movieId });
+    return this.http.post(`http://127.0.0.1:8000/profile/watch/`, { movie_id: movieId });
   }
 
   toggleFavorite(movieId: number): Observable<any> {
-    return this.http.post(`/api/profile/favorite/`, { movie_id: movieId });
+    return this.http.post(`http://127.0.0.1:8000/profile/favorite/`, { movie_id: movieId });
   }
 
   getWatchedMovies(): Observable<Movie[]> {
-    return this.http.get<Movie[]>('/api/profile/?action=watched');
+    return this.http.get<Movie[]>('http://127.0.0.1:8000/profile/?action=watched');
   }
 
   getFavoriteMovies(): Observable<Movie[]> {
-    return this.http.get<Movie[]>('/api/profile/?action=favorites');
+    return this.http.get<Movie[]>('http://127.0.0.1:8000/profile/?action=favorites');
   }
 }

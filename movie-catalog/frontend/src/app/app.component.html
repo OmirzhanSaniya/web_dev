@@ -3,29 +3,30 @@
   
   <span class="spacer"></span>
   
-  <ng-container *ngIf="auth.isAuthenticated()">
+  <ng-container *ngIf="auth.authStatus$ | async">
     <button mat-button [matMenuTriggerFor]="menu">
       <mat-icon>account_circle</mat-icon>
-      {{ (auth.currentUser$ | async)?.username }}  <!-- Use async pipe here -->
+      {{ (auth.currentUser$ | async)?.username }}
     </button>
     <mat-menu #menu="matMenu">
       <button mat-menu-item routerLink="/profile">
         <mat-icon>person</mat-icon>
-        <span>Профиль</span>
+        <span>Profile</span>
       </button>
       <button mat-menu-item (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>
-        <span>Выйти</span>
+        <span>Exit</span>
       </button>
     </mat-menu>
-  </ng-container>
-  
-  <button *ngIf="!auth.isAuthenticated()" 
-          mat-button 
-          routerLink="/login">
+  </ng-container>  
+
+  <button *ngIf="!(auth.authStatus$ | async)" mat-button routerLink="/login">
     <mat-icon>login</mat-icon>
-    Войти / Регистрация
+    Log in
   </button>
+  <button *ngIf="!(auth.authStatus$ | async)" mat-button routerLink="/register">
+    Sign in
+  </button>  
 </mat-toolbar>
 
 <router-outlet></router-outlet>
