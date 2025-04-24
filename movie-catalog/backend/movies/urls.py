@@ -13,6 +13,10 @@ from .views import (
     ReviewDetail,
     AddStarRatingView
 )
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 router = DefaultRouter()
 router.register(r'movies', MovieViewSet, basename='movie')
@@ -31,4 +35,6 @@ urlpatterns = [
     path('ratings/', AddStarRatingView.as_view(), name='rating-add'),
     path('ratings/<int:pk>/', RatingDetail.as_view(), name='rating-detail'),
     path('auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

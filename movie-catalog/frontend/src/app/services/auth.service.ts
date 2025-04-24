@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -9,24 +10,21 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(null);
   
   constructor(private http: HttpClient) {
-    // Проверяем токен при инициализации
     if (this.isAuthenticated()) {
       this.loadUserProfile();
     }
   }
 
-  // Observable для подписки на изменения статуса аутентификации
   get authStatus$() {
     return this.isAuthSubject.asObservable();
   }
 
-  // Observable для подписки на данные пользователя
   get currentUser$() {
     return this.currentUserSubject.asObservable();
   }
 
-  register(userData: {username: string, email: string, password: string}): Observable<any> {
-    return this.http.post('/api/register/', userData).pipe(
+  register(userData: { username: string; email: string; password: string }): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/register/`, userData).pipe(
       tap((res: any) => {
         if (res.token) {
           this.handleAuthentication(res.token);
@@ -35,27 +33,23 @@ export class AuthService {
     );
   }
 
-  login(credentials: {username: string, password: string}): Observable<any> {
-    return this.http.post('/api/login/', credentials).pipe(
+  login(credentials: { username: string; password: string }): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/token/`, credentials).pipe(
       tap((res: any) => {
         this.handleAuthentication(res.token);
       })
     );
   }
 
-  logout(): Observable<any> {
-    return this.http.post('/api/logout/', {}).pipe(
-      tap(() => {
-        this.handleLogout();
-      })
-    );
-  }
+  logout(): void {
+    localStorage.removeItem('token'); 
+    this.isAuthSubject.next(false);  
+    this.currentUserSubject.next(null); 
+  }  
 
   getProfile(): Observable<any> {
-    return this.http.get('/api/profile/').pipe(
-      tap(profile => {
-        this.currentUserSubject.next(profile);
-      })
+    return this.http.get(`${environment.apiUrl}/profile/`).pipe(
+      tap(profile => this.currentUserSubject.next(profile))
     );
   }
 
