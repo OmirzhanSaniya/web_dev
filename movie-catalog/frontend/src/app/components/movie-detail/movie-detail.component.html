@@ -1,1 +1,21 @@
-<p>movie-detail works!</p>
+<main *ngIf="movie">
+    <mat-card class="movie-detail-card">
+      <img mat-card-image [src]="movie.poster_url || 'assets/no-poster.jpg'" 
+           alt="Poster {{ movie.title }}"
+           class="movie-poster">
+  
+      <mat-card-header>
+        <mat-card-title>{{ movie.title }}</mat-card-title>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <p><strong>Year:</strong> {{ movie.year }}</p>
+        <p><strong>Genre:</strong> {{ getGenreNames(movie) }}</p>
+        <p><strong>Director:</strong> {{ movie.director.name }}</p>
+        <p><strong>IMDb:</strong> {{ movie.imdb_rating }}</p>
+        <p><strong>Description:</strong> {{ movie.description }}</p>
+        <p><strong>Cast:</strong> {{ movie.cast }}</p>
+      </mat-card-content>
+    </mat-card>
+  </main>
+  

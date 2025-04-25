@@ -1,0 +1,54 @@
+<div class="post-detail-container">
+    <button routerLink="/posts" class="btn-back">
+      ← Back to posts
+    </button>
+  
+    @if (isLoading) {
+      <div class="loading-spinner">
+        Loading post...
+      </div>
+    }
+  
+    @if (error) {
+      <div class="error-message">
+        {{ error }}
+        @if (error === 'Failed to load post') {
+          <div class="redirect-message">
+            You will be redirected back shortly...
+          </div>
+        }
+      </div>
+    }
+  
+    @if (post) {
+      <div class="post-detail">
+        <h1>{{ post.title }}</h1>
+        
+        <div class="post-meta">
+          <span class="post-category">{{ post.category.name }}</span>
+          <span class="post-tags">
+            @for (tag of post.tags; track tag.id) {
+              <span class="tag">#{{ tag.name }}</span>
+            }
+          </span>
+        </div>
+        
+        <div class="post-body">
+          <pre>{{ post.content }}</pre>
+        </div>
+        
+        <div class="post-footer">
+          <span class="post-author">by {{ post.author.username }}, {{ post.created_at | date:'mediumDate' }}</span>
+          
+          <div class="post-actions">
+            <button (click)="likePost(post.id)" class="btn-like">
+              Like ({{ post.likes_count }})
+            </button>
+            <button (click)="savePost(post.id)" class="btn-save">
+              {{ post.is_saved ? 'Saved' : 'Save' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>

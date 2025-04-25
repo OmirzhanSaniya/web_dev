@@ -1,13 +1,12 @@
+mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  // background-color: black;
+  // color: white;
+  margin-bottom: 20px;
+}
+
 .spacer {
-    flex: 1 1 auto;
-  }
-  
-  mat-toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  
-  mat-icon {
-    margin-right: 8px;
-  }
+  flex: 1;
+}

@@ -1,0 +1,100 @@
+<div class="container">
+  <!-- Заголовок и кнопка создания -->
+  <div class="header">
+    <h1>Posts</h1>
+    <button *ngIf="isAuthenticated" routerLink="/posts/create" class="btn btn-primary">
+      Create New Post
+    </button>
+  </div>
+
+  <!-- Основной контент и боковая панель -->
+  <div class="main-content">
+    <!-- Список постов -->
+    <div class="post-list">
+      <div *ngFor="let post of filteredPosts" class="post-card" [routerLink]="['/posts', post.id]">
+        <h2 class="post-title">{{ post.title }}</h2>
+        
+        <div class="post-meta">
+          <span class="post-category" 
+                (click)="$event.stopPropagation(); onCategorySelect(post.category.name)"
+                [class.active]="selectedCategory === post.category.name">
+            {{ post.category.name }}
+          </span>
+          <span class="post-tags">
+            <span *ngFor="let tag of post.tags" 
+                  class="tag"
+                  (click)="$event.stopPropagation(); onTagSelect(tag.name)"
+                  [class.active]="selectedTag === tag.name">
+              #{{ tag.name }}
+            </span>
+          </span>
+        </div>
+        
+        <p class="post-content">{{ post.content | truncate:150 }}</p>
+        
+        <div class="post-footer">
+          <span class="post-author">by {{ post.author.username }}, {{ post.created_at | date:'mediumDate' }}</span>
+          
+          <div class="post-actions">
+            <button (click)="$event.stopPropagation(); likePost(post.id)" 
+                    class="btn-like"
+                    [class.liked]="post.is_liked">
+              Like ({{ post.likes_count }})
+            </button>
+            <button (click)="$event.stopPropagation(); savePost(post.id)" 
+                    class="btn-save"
+                    [class.saved]="post.is_saved">
+              Save
+            </button>
+            
+            <span *ngIf="currentUser?.id === post.author.id">
+              <button [routerLink]="['/posts/edit', post.id]" 
+                      (click)="$event.stopPropagation()" 
+                      class="btn-edit">
+                Edit
+              </button>
+              <button (click)="$event.stopPropagation(); deletePost(post.id)" 
+                      class="btn-delete">
+                Delete
+              </button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Боковая панель с категориями и тегами -->
+    <div class="sidebar">
+      <div class="categories">
+        <h3>Categories</h3>
+        <ul>
+          <li *ngFor="let category of categories" 
+              (click)="onCategorySelect(category.name)"
+              [class.active]="selectedCategory === category.name">
+            {{ category.name }}
+          </li>
+        </ul>
+      </div>
+      
+      <div class="tags">
+        <h3>Tags</h3>
+        <div class="tag-cloud">
+          <span *ngFor="let tag of tags" 
+                (click)="onTagSelect(tag.name)" 
+                class="tag"
+                [class.active]="selectedTag === tag.name">
+            #{{ tag.name }}
+          </span>
+        </div>
+      </div>
+      
+      <div *ngIf="selectedCategory || selectedTag" class="filter-controls">
+        <button (click)="clearFilters()" class="btn-clear">Clear filters</button>
+        <div class="active-filters">
+          <span *ngIf="selectedCategory">Category: {{selectedCategory}}</span>
+          <span *ngIf="selectedTag">Tag: {{selectedTag}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

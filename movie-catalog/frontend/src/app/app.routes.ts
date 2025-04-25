@@ -7,12 +7,10 @@ import { ProfileComponent } from './auth/profile/profile.component';
 import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
-  { path: '', component: MovieListComponent },
-  { path: 'movie/:id', component: MovieDetailComponent },
-  { path: '**', redirectTo: '' },
-  { path: '', component: MovieListComponent },
-  { path: 'movie/:id', component: MovieDetailComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'login', component: LoginComponent },
+  { path: '', component: MovieListComponent },  
+  { path: 'movie/:id', component: MovieDetailComponent }, 
+  { path: 'register', component: RegisterComponent }, 
+  { path: 'login', component: LoginComponent }, 
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  { path: '**', redirectTo: '' }  
 ];

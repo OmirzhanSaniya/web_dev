@@ -4,7 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
-import { RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -16,17 +16,20 @@ import { AuthService } from './services/auth.service';
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
-    RouterModule
+    RouterModule,
+    RouterLink,        
+    RouterOutlet 
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'frontend';  // Add this line
+  title = 'frontend'; 
   
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService, private router: Router) {}
 
   logout() {
-    this.auth.logout().subscribe();
+    this.auth.logout();
+    this.router.navigate(['/']); 
   }
 }

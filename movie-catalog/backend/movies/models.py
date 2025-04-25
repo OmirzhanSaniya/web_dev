@@ -46,6 +46,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     watched_movies = models.ManyToManyField(Movie, related_name='watched_by', blank=True)
     favorite_movies = models.ManyToManyField(Movie, related_name='favorited_by', blank=True)
+    watchlist_movies = models.ManyToManyField(Movie, related_name='in_watchlists', blank=True)
     
     def __str__(self):
         return f"Profile of {self.user.username}"

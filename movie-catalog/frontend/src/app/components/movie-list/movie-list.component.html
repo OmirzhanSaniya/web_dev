@@ -1,53 +1,67 @@
-<div class="movie-container">
-    <h2>Список фильмов</h2>
-    
-    <div *ngIf="isLoading" class="loading">Загрузка...</div>
-    
-    <div *ngIf="!isLoading && movies.length === 0" class="no-movies">
-      Фильмы не найдены
-    </div>
-  
-    <div class="movie-grid">
-      <mat-card *ngFor="let movie of movies" class="movie-card">
-        <!-- Добавляем постер -->
-        <img mat-card-image 
-             [src]="movie.poster_url || 'assets/no-poster.jpg'" 
-             alt="Постер фильма {{movie.title}}"
-             class="movie-poster"
-             *ngIf="movie.poster_url || showDefaultPoster">
-             
-        <mat-card-header>
-          <mat-card-title>{{ movie.title }}</mat-card-title>
-          <mat-card-subtitle>
-            {{ movie.year }} · {{ movie.duration }} · {{ movie.genre }}
-          </mat-card-subtitle>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <p>{{ movie.description }}</p>
-          <p><strong>Режиссер:</strong> {{ movie.director }}</p>
-        </mat-card-content>
-        
-        <mat-card-actions *ngIf="showActions">
-          <button mat-button color="primary" 
-                  [routerLink]="['/movie', movie.id]"
-                  *ngIf="movie.id">
-            Подробнее
-          </button>
-          
-          <button mat-icon-button 
-                  (click)="toggleFavorite(movie.id)"
-                  *ngIf="isAuthenticated() && movie.id"
-                  [color]="isFavorite(movie.id) ? 'warn' : ''">
-            <mat-icon>{{ isFavorite(movie.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
-          </button>
-          
-          <button mat-button color="warn" 
-                  (click)="deleteMovie(movie.id)"
-                  *ngIf="movie.id">
-            Удалить
-          </button>
-        </mat-card-actions>
+<div class="body">
+  <!-- Filter & Sort Controls -->
+  <div class="flex flex-wrap items-center gap-4 mb-6">
+    <mat-form-field appearance="outline">
+      <mat-label>Filter by Genre</mat-label>
+      <select matNativeControl [(ngModel)]="selectedGenre" (change)="onGenreChange(selectedGenre)">
+        <option value="">All</option>
+        <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+      </select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Sort by</mat-label>
+      <select matNativeControl [(ngModel)]="sortOption" (change)="onSortChange(sortOption)">
+        <option value="">None</option>
+        <option value="rating">Top Rated</option>
+        <option value="year">Most Recent</option>
+      </select>
+    </mat-form-field>
+  </div>
+
+  <!-- Movie Cards -->
+  <div *ngIf="isLoading" class="text-gray-500 text-center">Loading movies...</div>
+
+  <div *ngIf="!isLoading && filteredMovies.length === 0" class="text-gray-500 text-center">
+    No movies found.
+  </div>
+
+  <div class="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+    <mat-card *ngFor="let movie of filteredMovies" class="relative">
+      <mat-card class="movie-card-horizontal">
+        <div class="movie-poster-container">
+          <img
+            [src]="movie.poster_url || 'assets/no-poster.jpg'"
+            alt="{{ movie.title }} Poster"
+            class="movie-poster"
+          />
+        </div>
+      
+        <div class="movie-details">
+          <mat-card-header>
+            <mat-card-title>{{ movie.title }}</mat-card-title>
+            <mat-card-subtitle>{{ movie.year }} | {{ getGenreNames(movie) }}</mat-card-subtitle>
+          </mat-card-header>
+      
+          <mat-card-content>
+            <p><strong>Director:</strong> {{ movie.director.name }}</p>
+            <p><strong>IMDb:</strong> {{ movie.imdb_rating || 'N/A' }}</p>
+            <button mat-button color="primary" [routerLink]="['/movie', movie.id]">
+            More Information
+            </button>
+          </mat-card-content>
+
+          <mat-card-actions class="action-buttons">
+            <button mat-icon-button color="primary" (click)="toggleWatched(movie.id)">
+              <mat-icon>{{ isWatched(movie.id) ? 'visibility' : 'visibility_off' }}</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="toggleFavorite(movie.id)">
+              <mat-icon>{{ isFavorite(movie.id) ? 'favorite' : 'favorite_border' }}</mat-icon>
+            </button>
+          </mat-card-actions>
+        </div>
       </mat-card>
-    </div>
+      
+    </mat-card>
+  </div>
 </div>
