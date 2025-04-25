@@ -24,4 +24,6 @@ src/environments/*.ts   # Angular environment files (–µ—Å–ª–∏ –æ–Ω–∏ –Ω–µ –¥–æ–ª
 */migrations/
 
 # .env files for secrets
-*.env
+*.env"__pycache__/" 
+"*.pyc" 
+"çÆ¢†Ô Ø†Ø™†*/" 
