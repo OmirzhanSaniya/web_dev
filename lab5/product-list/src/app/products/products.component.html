@@ -1,0 +1,70 @@
+<header class="Product-list"> 
+  <div class="container">
+    <a href="#" class="brand">
+      <span class="brand-text">Product-list</span>
+    </a>
+  </div>
+</header>
+
+<div class="category-filter">
+  <label for="category">Select category:</label>
+  <select id="category" (change)="filterByCategory($event)">
+    <option value="All">All</option>
+    <option value="Liked">Favorite</option>
+    <option value="Phones">Phones</option>
+    <option value="Laptops">Laptops</option>
+    <option value="Headphones">Headphones</option>
+    <option value="TVs">TVs</option>
+    <option value="Others">Others</option>
+  </select>
+</div>
+
+<div class="products-grid">
+  <div class="product-card" *ngFor="let product of filteredProducts; trackBy: trackByProduct">
+    <div class="image-gallery">
+      <div class="image-container" *ngFor="let img of product.images">
+        <img [src]="img" alt="Product image" class="gallery-image" />
+      </div>
+    </div>
+  
+    <h3 class="product-name">{{ product.name }}</h3>
+    <p class="product-description">{{ product.description || 'No description' }}</p>
+  
+    <div class="rating">
+      <span *ngFor="let star of getStars(product.rating)" class="star">
+        <i class="fas" [ngClass]="star ? 'fa-star' : 'fa-star-o'"></i>
+      </span>
+      <span class="rating-value">Rating: {{ product.rating }}/5</span>
+  
+      <button class = "like-button" (click) = "toggleFavorite(product)"> 
+        <img
+          [src] = "product.isFavorite ? 'assets/heart-filled.png' : 'assets/heart-outline.png'"
+          alt = "Like"
+          class = "like-icon"
+          width = "13" height= "13"
+        />
+      </button> 
+    </div>      
+
+    <!-- <div class="like-section">
+      <button class="like-button" (click)="likeProduct(product)">
+        ❤️ {{ product.likeCount }}
+      </button>
+    </div> -->
+
+    <div class="price-buy-container">
+      <span class="product-price">{{ product.price }} ₸</span>
+      <button class="kaspi-buy small" (click)="openKaspiLink(product.kaspiLink)">
+        Buy on Kaspi.kz
+      </button>
+    </div> 
+    
+    <div class="share-links">
+      <a (click)="shareViaWhatsApp(product.kaspiLink)">Share on WhatsApp</a> |
+      <a (click)="shareViaTelegram(product.kaspiLink)">Share on Telegram</a>
+    </div>
+
+    <button class="remove-button" (click)="removeProduct(product)">Remove</button>
+    
+  </div>
+</div>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="microsoft.css">
+    <title>Microsoft</title>
+    <style>
+        body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.header {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 10px;
+    font-size: 14px;
+}
+
+.header a:hover {
+    text-decoration: underline;
+}
+
+.hero {
+    position: relative;
+    background-image: url(1.png);
+    color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+    height: 400px;
+}
+
+.hero .text {
+    max-width: 500px;
+    background-color: white;
+}
+
+.hero h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.hero p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: auto;
+    padding: 10px;
+}
+
+.hero button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #0078d4;
+    border: none;
+    border-radius: 2px;
+    color: white;
+    cursor: pointer;
+}
+
+.hero button:hover {
+    background-color: #005a9e;
+}
+
+.hero img {
+    max-height: 300px;
+}
+
+.icons-section {
+    display: flex;
+    justify-content: center;
+    background-color: #ffffff;
+    padding: 20px;
+    gap: 20px;
+    text-decoration: underline blue;
+    font-weight: bold;
+}
+
+.icon {
+    text-align: center;
+}
+
+.icon img {
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.icon a {
+    text-decoration: none;
+    color: #0078d4;
+    font-size: 14px;
+}
+
+.icon a:hover {
+    text-decoration: underline;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.product-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.product-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.product-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.product-card button {
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #0078d4;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+.product-card button:hover {
+    background-color: #005a9e;
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            <a href="#">Microsoft</a>
+        </div>
+        <nav>
+            <a href="#">Microsoft 365</a>
+            <a href="#">Surface</a>
+            <a href="#">Xbox</a>
+            <a href="#">Support</a>
+        </nav>
+    </div>
+
+    <div class="hero">
+        <div class="text">
+            <h1>Meet Surface Pro</h1>
+            <p>This laptop's unparalleled flexibility and AI features like Live Captions<br> and Cocreator enable you to do more than you ever imagined.</p>
+            <button>Shop Now</button>
+        </div>
+        <img src="1.png" alt="Surface Pro">
+    </div>
+
+    <div class="icons-section">
+        <div class="icon">
+            <img src="6.png" alt="">
+            <a href="#">Shop Surface devices</a>
+        </div>
+        <div class="icon">
+            <img src="7.png" alt="">
+            <a href="#">Shop Xbox games and consoles</a>
+        </div>
+        <div class="icon">
+            <img src="8.png" alt="">
+            <a href="#">Shop for accessories</a>
+        </div>
+        <div class="icon">
+            <img src="9.png" alt="">
+            <a href="#">Shop for your business</a>
+        </div>
+        <div class="icon">
+            <img src="10.png" alt="">
+            <a href="#">Find your next PC</a>
+        </div>
+        <div class="icon">
+            <img src="11.png" alt="">
+            <a href="#">Choose your Microsoft 365</a>
+        </div>
+    </div>
+
+    <div class="products">
+        <div class="product-card">
+            <img src="2.png" alt="Product 1">
+            <h3>Surface Laptop, Copilot + PC</h3>
+            <p>Unlock AI features like Live Captions and Cocreator.</p>
+            <button>Shop Now</button>
+        </div>
+        <div class="product-card">
+            <img src="3.png" alt="Product 2">
+            <h3>Xbox Series S</h3>
+            <p>Next-gen performance in the smallest Xbox ever.</p>
+            <button>Shop Xbox Series S</button>
+        </div>
+        <div class="product-card">
+            <img src="4.png" alt="Product 3">
+            <h3>Xbox controllers</h3>
+            <p>Elite, wireless, adaptive—find the controller that fits your style.</p>
+            <button>Shop Now</button>
+        </div>
+        <div class="product-card">
+            <img src="5.png" alt="Product 4">
+            <h3>Developer Direct</h3>
+            <p>Tune in to hear directly from the developers.</p>
+            <button>Learn More</button>
+        </div>
+    </div>
+</body>
+</html>

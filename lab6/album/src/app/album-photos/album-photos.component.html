@@ -1,0 +1,12 @@
+<div *ngIf="loaded">
+  <a routerLink="/albums/{{albumsId}}"><button>Go back</button></a>
+  <input type="number"  [(ngModel)]="width">
+  <input type="number"  [(ngModel)]="height">
+  <ul *ngFor="let photo of photos" >
+    <li>
+      <img src="{{photo.url}}" width="{{width}}" height="{{height}}">
+
+    </li>
+  </ul>
+</div>
+<h3 *ngIf="!loaded">Loading...</h3>
